@@ -51,15 +51,17 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Switch sw = findViewById(R.id.switchTemperature);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!citiesList.isEmpty()){
                 City.convertTemperatureType(citiesList.get(0));
                 updateCityInfo(citiesList.get(0));
+                }
                 tempType = isChecked ? "C":"F";
             }
         });
 
         //initLoaderManager(LOADER_ID);
-        initCities();
-        updateCityInfo(citiesList.get(0));
+//        initCities();
+//        updateCityInfo(citiesList.get(0));
     }
 
     @Override
