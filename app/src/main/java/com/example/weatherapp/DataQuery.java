@@ -15,7 +15,7 @@ public class DataQuery {
     public static City fetchCityData(String cityQuery, String tempType) {
         City city = null;
 
-        String JSON_WEATHER_URL = "http://api.openweathermap.org/data/2.5/weather?q=";
+        String JSON_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
         String TYPE = "&units=" + (tempType.equals("C") ? "metric" : "imperial");
         String URL_TAIL = "&appid=cf7ef9156622ecccc8decb4a00a549b1";
         try {

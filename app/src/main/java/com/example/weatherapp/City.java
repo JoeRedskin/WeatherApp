@@ -18,22 +18,22 @@ public class City {
     @TypeConverters({DateConverter.class})
     private LocalDateTime date;
 
-    public City( String name, String temperatureType, Double temperature){
+    public City(String name, String temperatureType, Double temperature) {
         this.name = name;
         this.temperatureType = temperatureType;
         this.temperature = temperature;
         this.date = LocalDateTime.now();
     }
 
-    public static void convertTemperatureType(City city){
-        switch (city.temperatureType){
+    public static void convertTemperatureType(City city) {
+        switch (city.temperatureType) {
             case "F":
                 city.temperatureType = "C";
-                city.temperature = (city.temperature-32) / 1.8;
+                city.temperature = (city.temperature - 32) / 1.8;
                 break;
             case "C":
                 city.temperatureType = "F";
-                city.temperature = city.temperature * 1.8 + 32 ;
+                city.temperature = city.temperature * 1.8 + 32;
                 break;
             default:
                 break;

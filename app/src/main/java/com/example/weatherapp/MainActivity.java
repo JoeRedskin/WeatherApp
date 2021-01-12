@@ -1,5 +1,14 @@
 package com.example.weatherapp;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.SearchView;
+import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager;
@@ -8,16 +17,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.SearchView;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +52,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         Switch sw = findViewById(R.id.switchTemperature);
         sw.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(!citiesList.isEmpty()){
-                City.convertTemperatureType(citiesList.get(0));
-                updateCityInfo(citiesList.get(0));
+                if (!citiesList.isEmpty()) {
+                    City.convertTemperatureType(citiesList.get(0));
+                    updateCityInfo(citiesList.get(0));
                 }
-                tempType = isChecked ? "C":"F";
+                tempType = isChecked ? "C" : "F";
             }
         });
 
@@ -83,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onStop() {
         super.onStop();
-        if(!citiesList.isEmpty()){
-            for (int i = citiesList.size()-1; i >= 0; i--) {
+        if (!citiesList.isEmpty()) {
+            for (int i = citiesList.size() - 1; i >= 0; i--) {
                 City city = citiesList.get(i);
                 if (city.getId() == null) {
                     db.getPersonDao().setCity(city.getId(),
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void updateCityInfo(City city){
+    public void updateCityInfo(City city) {
         String tempString = (int) Math.round(city.getTemperature()) + "°";
         cityName.setText(city.getName());
         cityTemp.setText(tempString);
@@ -133,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //        adapter.notifyDataSetChanged();
 //    }
 
-    public void initLoaderManager(int loaderId){
+    public void initLoaderManager(int loaderId) {
 //        LoaderManager loaderManager = getLoaderManager();
         LoaderManager loaderManager = getSupportLoaderManager();
         loaderManager.restartLoader(loaderId, null, this);
@@ -150,11 +149,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         //citiesList.clear();
 
         if (data != null) {
-            citiesList.add(0,data);
+            citiesList.add(0, data);
             adapter.notifyDataSetChanged();
             updateCityInfo(data);
-        } else
-        {
+        } else {
             Toast.makeText(this,
                     "City not found: " + cityQuery,
                     Toast.LENGTH_LONG).show();
