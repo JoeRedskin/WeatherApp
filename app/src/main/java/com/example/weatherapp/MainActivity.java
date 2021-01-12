@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         }
+
+        //getSupportLoaderManager().destroyLoader(LOADER_ID);
     }
 
     @Override
@@ -138,11 +140,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         loaderManager.restartLoader(loaderId, null, this);
     }
 
+
     @NonNull
     @Override
     public Loader<City> onCreateLoader(int i, Bundle bundle) {
         return new CityLoader(this, cityQuery, tempType);
     }
+
+
 
     @Override
     public void onLoadFinished(@NonNull androidx.loader.content.Loader<City> loader, City data) {
@@ -157,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     "City not found: " + cityQuery,
                     Toast.LENGTH_LONG).show();
         }
+        getSupportLoaderManager().destroyLoader(LOADER_ID);
     }
 
     @Override
