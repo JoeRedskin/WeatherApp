@@ -84,14 +84,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     protected void onStop() {
         super.onStop();
         if(!citiesList.isEmpty()){
-            for (City city: citiesList)
-                if(city.getId() == null) {
+            for (int i = citiesList.size()-1; i >= 0; i--) {
+                City city = citiesList.get(i);
+                if (city.getId() == null) {
                     db.getPersonDao().setCity(city.getId(),
                             city.getName(),
                             city.getTemperatureType(),
                             city.getTemperature(),
                             city.getDate());
                 }
+            }
         }
     }
 
