@@ -15,7 +15,6 @@ object DataQuery {
     fun fetchCityData(cityQuery: String): City? {
         var city: City? = null
         val JSON_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q="
-//        val TYPE = "&units=" + if (tempType == "C") "metric" else "imperial"
         val URL_TAIL = "&appid=cf7ef9156622ecccc8decb4a00a549b1"
         try {
             val stringUrl = JSON_WEATHER_URL + cityQuery + URL_TAIL

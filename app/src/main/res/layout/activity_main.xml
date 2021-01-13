@@ -56,13 +56,12 @@
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/vertical_margin"
             android:checked="true"
-            app:showText="true"
             android:textOff="@string/fahrenheit"
             android:textOn="@string/celsius"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-        </androidx.appcompat.widget.SwitchCompat>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:showText="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -78,8 +77,6 @@
         app:layout_constraintVertical_weight="2"
         tools:itemCount="5"
         tools:listitem="@layout/city_item">
-
     </androidx.recyclerview.widget.RecyclerView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

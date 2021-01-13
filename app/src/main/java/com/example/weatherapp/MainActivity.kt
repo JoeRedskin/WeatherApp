@@ -38,10 +38,10 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
         if (!hasVisited!!) {
             val editor: Editor? = preferenceTemp?.edit()
             editor?.putBoolean(HAS_VISITED, true)
-            editor?.putString(TEMP_TYPE,"C")
+            editor?.putString(TEMP_TYPE, "C")
             editor?.apply()
         }
-        tempType = preferenceTemp?.getString(TEMP_TYPE,"")!!
+        tempType = preferenceTemp?.getString(TEMP_TYPE, "")!!
         cityName = findViewById(R.id.city_name)
         cityTemp = findViewById(R.id.city_temperature)
         recyclerView = findViewById(R.id.recycler_vew)
@@ -49,11 +49,11 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
         adapter = CityAdapter(citiesList, preferenceTemp)
         recyclerView?.adapter = adapter
         switchCompat = findViewById(R.id.switch_temperature)
-        if(tempType == "F") switchCompat?.isChecked = false
+        if (tempType == "F") switchCompat?.isChecked = false
         switchCompat!!.setOnCheckedChangeListener { _, isChecked ->
             tempType = if (isChecked) "C" else "F"
             val editor: Editor? = preferenceTemp?.edit()
-            editor?.putString(TEMP_TYPE,tempType)
+            editor?.putString(TEMP_TYPE, tempType)
             editor?.apply()
             if (citiesList.isNotEmpty()) {
                 updateCityInfo(citiesList[0])
@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     }
 
     private fun updateCityInfo(city: City) {
-        val tempType = preferenceTemp?.getString(TEMP_TYPE,"")!!
+        val tempType = preferenceTemp?.getString(TEMP_TYPE, "")!!
         val temperature = Utils().convertTemperatureType(city.temperature, tempType)
         val tempString = "${temperature.roundToInt()} °"
         cityName!!.text = city.name
