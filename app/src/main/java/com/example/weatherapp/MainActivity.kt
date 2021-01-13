@@ -1,17 +1,21 @@
 package com.example.weatherapp
 
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.view.Menu
-import android.widget.*
+import android.widget.SearchView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.Loader
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import java.util.*
 import kotlin.math.roundToInt
+
 
 class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     var citiesList = ArrayList<City>()
@@ -20,6 +24,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     var cityName: TextView? = null
     var cityTemp: TextView? = null
     var cityQuery: String? = null
+    private var preferenceTemp: SharedPreferences? = null
     private var switchCompat: SwitchCompat? = null
     var tempType = "C"
     var db: AppDatabase? = null
@@ -27,17 +32,29 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        preferenceTemp = getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
+        val hasVisited: Boolean? = preferenceTemp?.getBoolean(HAS_VISITED, false)
 
+        if (!hasVisited!!) {
+            val editor: Editor? = preferenceTemp?.edit()
+            editor?.putBoolean(HAS_VISITED, true)
+            editor?.putString(TEMP_TYPE,"C")
+            editor?.apply()
+        }
+        tempType = preferenceTemp?.getString(TEMP_TYPE,"")!!
         cityName = findViewById(R.id.city_name)
         cityTemp = findViewById(R.id.city_temperature)
         recyclerView = findViewById(R.id.recycler_vew)
 
-//        recyclerView.itemAnimator = DefaultItemAnimator()
-        adapter = CityAdapter(citiesList, tempType)
+        adapter = CityAdapter(citiesList, preferenceTemp)
         recyclerView?.adapter = adapter
         switchCompat = findViewById(R.id.switch_temperature)
+        if(tempType == "F") switchCompat?.isChecked = false
         switchCompat!!.setOnCheckedChangeListener { _, isChecked ->
             tempType = if (isChecked) "C" else "F"
+            val editor: Editor? = preferenceTemp?.edit()
+            editor?.putString(TEMP_TYPE,tempType)
+            editor?.apply()
             if (citiesList.isNotEmpty()) {
                 updateCityInfo(citiesList[0])
             }
@@ -46,9 +63,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
 
         db = Room.databaseBuilder(applicationContext,
                 AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
-
         //db?.personDao?.deleteAll();
-
     }
 
     override fun onStart() {
@@ -67,9 +82,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
         if (citiesList.isNotEmpty()) {
             for (i in citiesList.indices.reversed()) {
                 val city = citiesList[i]
-                if (city.id == null) {
-                    db?.personDao?.insert(city)
-                }
+                if (city.id == null) db?.personDao?.insert(city)
             }
         }
     }
@@ -93,6 +106,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     }
 
     private fun updateCityInfo(city: City) {
+        val tempType = preferenceTemp?.getString(TEMP_TYPE,"")!!
         val temperature = Utils().convertTemperatureType(city.temperature, tempType)
         val tempString = "${temperature.roundToInt()} °"
         cityName!!.text = city.name
@@ -128,5 +142,8 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
 
     companion object {
         const val LOADER_ID = 1
+        const val HAS_VISITED = "hasVisited"
+        const val TEMP_PREF = "temperature"
+        const val TEMP_TYPE = "temperatureType"
     }
 }
