@@ -48,8 +48,14 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
                 AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
 
         //db?.personDao?.deleteAll();
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         val everyone = db!!.personDao?.allCities
         if (everyone!!.isNotEmpty()) {
+            citiesList.clear()
             citiesList.addAll(everyone)
             adapter!!.notifyDataSetChanged()
             updateCityInfo(citiesList[0])
