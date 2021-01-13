@@ -1,30 +1,39 @@
 package com.example.weatherapp;
 
-import java.util.Date;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
+import java.time.LocalDateTime;
+
+@Entity
 public class City {
 
-    private String name;
+    @PrimaryKey(autoGenerate = true)
+    private Integer id;
+    private String name = "";
     private String temperatureType;
     private Double temperature;
-    private Date date;
 
-    public City(String name, String temperatureType, Double temperature){
+    @TypeConverters({DateConverter.class})
+    private LocalDateTime date;
+
+    public City(String name, String temperatureType, Double temperature) {
         this.name = name;
         this.temperatureType = temperatureType;
         this.temperature = temperature;
-        this.date = new Date();
+        this.date = LocalDateTime.now();
     }
 
-    public static void convertTemperatureType(City city){
-        switch (city.temperatureType){
+    public static void convertTemperatureType(City city) {
+        switch (city.temperatureType) {
             case "F":
                 city.temperatureType = "C";
-                city.temperature = (city.temperature-32) / 1.8;
+                city.temperature = (city.temperature - 32) / 1.8;
                 break;
             case "C":
                 city.temperatureType = "F";
-                city.temperature = city.temperature * 1.8 + 32 ;
+                city.temperature = city.temperature * 1.8 + 32;
                 break;
             default:
                 break;
@@ -43,7 +52,19 @@ public class City {
         return temperature;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
     }
 }

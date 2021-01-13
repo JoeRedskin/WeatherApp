@@ -10,8 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class CityAdapter extends RecyclerView.Adapter<CityAdapter.MyViewHolder> {
 
@@ -49,9 +50,11 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.MyViewHolder> 
         return citiesList.size();
     }
 
-    private String formatDate(Date dateObject) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy H:mm:ss");
-        return dateFormat.format(dateObject);
+    private String formatDate(LocalDateTime dateObject) {
+        DateTimeFormatter formatter = DateTimeFormatter
+                        .ofPattern("dd.MM.yyyy H:mm:ss");
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy H:mm:ss");
+        return formatter.format(dateObject);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
