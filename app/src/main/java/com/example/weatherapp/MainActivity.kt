@@ -1,7 +1,6 @@
 package com.example.weatherapp
 
 import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -19,63 +18,70 @@ import java.util.*
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
-    lateinit var mService: CityServices
-    var citiesList = ArrayList<City>()
-    var adapter: CityAdapter? = null
-    var recyclerView: RecyclerView? = null
-    var cityName: TextView? = null
-    var cityTemp: TextView? = null
-    var cityQuery: String? = null
-    private var preferenceTemp: SharedPreferences? = null
-    private var switchCompat: SwitchCompat? = null
-    var tempType = "C"
-    var db: AppDatabase? = null
+    private val recyclerView: RecyclerView by lazy {
+        findViewById(R.id.recycler_view)
+    }
+    private val cityName: TextView by lazy {
+        findViewById(R.id.city_name)
+    }
+    private val cityTemp: TextView by lazy {
+        findViewById(R.id.city_temperature)
+    }
+    private val switchCompat: SwitchCompat by lazy {
+        findViewById(R.id.switch_temperature)
+    }
+    private val preferenceTemp: SharedPreferences by lazy {
+        getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
+    }
+    private val mService: CityServices by lazy {
+        Common.cityService
+    }
+    val adapter: CityAdapter by lazy {
+        CityAdapter(citiesList, preferenceTemp)
+    }
+    private val db: AppDatabase by lazy {
+        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
+    }
+    private var citiesList = ArrayList<City>()
+    private var cityQuery = ""
+    private var tempType = "C"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        mService = Common.cityService
-        preferenceTemp = getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
-        val hasVisited: Boolean? = preferenceTemp?.getBoolean(HAS_VISITED, false)
+        val hasVisited = preferenceTemp.getBoolean(HAS_VISITED, false)
 
-        if (!hasVisited!!) {
-            val editor: Editor? = preferenceTemp?.edit()
-            editor?.putBoolean(HAS_VISITED, true)
-            editor?.putString(TEMP_TYPE, "C")
-            editor?.apply()
+        if (!hasVisited) {
+            val editor = preferenceTemp.edit()
+            editor.putBoolean(HAS_VISITED, true)
+            editor.putString(TEMP_TYPE, "C")
+            editor.apply()
         }
-        tempType = preferenceTemp?.getString(TEMP_TYPE, "")!!
-        cityName = findViewById(R.id.city_name)
-        cityTemp = findViewById(R.id.city_temperature)
-        recyclerView = findViewById(R.id.recycler_vew)
+        tempType = preferenceTemp.getString(TEMP_TYPE, "").toString()
 
-        adapter = CityAdapter(citiesList, preferenceTemp)
-        recyclerView?.adapter = adapter
-        switchCompat = findViewById(R.id.switch_temperature)
-        if (tempType == "F") switchCompat?.isChecked = false
-        switchCompat!!.setOnCheckedChangeListener { _, isChecked ->
+        recyclerView.adapter = adapter
+        if (tempType == "F") switchCompat.isChecked = false
+        switchCompat.setOnCheckedChangeListener { _, isChecked ->
             tempType = if (isChecked) "C" else "F"
-            val editor: Editor? = preferenceTemp?.edit()
-            editor?.putString(TEMP_TYPE, tempType)
-            editor?.apply()
+            val editor = preferenceTemp.edit()
+            editor.putString(TEMP_TYPE, tempType)
+            editor.apply()
             if (citiesList.isNotEmpty()) {
                 updateCityInfo(citiesList[0])
             }
-            adapter!!.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
         }
 
-        db = Room.databaseBuilder(applicationContext,
-                AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
-        //db?.personDao?.deleteAll();
+//        db.personDao.deleteAll();
     }
 
     override fun onStart() {
         super.onStart()
-        val everyone = db!!.personDao?.allCities
-        if (everyone!!.isNotEmpty()) {
+        val everyone = db.personDao.allCities
+        if (everyone.isNotEmpty()) {
             citiesList.clear()
             citiesList.addAll(everyone)
-            adapter!!.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
             updateCityInfo(citiesList[0])
         }
     }
@@ -85,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         if (citiesList.isNotEmpty()) {
             for (i in citiesList.indices.reversed()) {
                 val city = citiesList[i]
-                if (city.id == null) db?.personDao?.insert(city)
+                if (city.id == null) db.personDao.insert(city)
             }
         }
     }
@@ -118,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 val newCity = response.body()
                 if (newCity != null) {
                     citiesList.add(0, newCity)
-                    adapter!!.notifyDataSetChanged()
+                    adapter.notifyDataSetChanged()
                     updateCityInfo(newCity)
                 } else {
                     Toast.makeText(this@MainActivity,
@@ -130,11 +136,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCityInfo(city: City) {
-        val tempType = preferenceTemp?.getString(TEMP_TYPE, "")!!
+        val tempType = preferenceTemp.getString(TEMP_TYPE, "").toString()
         val temperature = Utils().convertTemperatureType(city.main.temp, tempType)
         val tempString = "${temperature.roundToInt()} °"
-        cityName!!.text = city.name
-        cityTemp!!.text = tempString
+        cityName.text = city.name
+        cityTemp.text = tempString
     }
 
     companion object {

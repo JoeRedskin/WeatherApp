@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
-class CityAdapter(private val citiesList: ArrayList<City>, private val preferenceTemp: SharedPreferences?) : RecyclerView.Adapter<MyViewHolder>() {
+class CityAdapter(private val citiesList: ArrayList<City>, private val preferenceTemp: SharedPreferences) : RecyclerView.Adapter<MyViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.city_item, parent, false)
@@ -23,8 +23,8 @@ class CityAdapter(private val citiesList: ArrayList<City>, private val preferenc
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val city = citiesList[position]
         val name = city.name
-        val tempType = preferenceTemp?.getString(MainActivity.TEMP_TYPE, "")
-        val temperature = Utils().convertTemperatureType(city.main.temp, tempType!!)
+        val tempType = preferenceTemp.getString(MainActivity.TEMP_TYPE, "").toString()
+        val temperature = Utils().convertTemperatureType(city.main.temp, tempType)
         val information = "$name, ${temperature.roundToInt()} ° $tempType"
         val date = formatDate(city.date)
         holder.cityInformation.text = information
