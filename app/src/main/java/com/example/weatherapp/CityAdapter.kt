@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.CityAdapter.MyViewHolder
+import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -23,7 +24,7 @@ class CityAdapter(private val citiesList: ArrayList<City>, private val preferenc
         val city = citiesList[position]
         val name = city.name
         val tempType = preferenceTemp?.getString(MainActivity.TEMP_TYPE, "")
-        val temperature = Utils().convertTemperatureType(city.temperature, tempType!!)
+        val temperature = Utils().convertTemperatureType(city.main.temp, tempType!!)
         val information = "$name, ${temperature.roundToInt()} ° $tempType"
         val date = formatDate(city.date)
         holder.cityInformation.text = information
@@ -34,9 +35,12 @@ class CityAdapter(private val citiesList: ArrayList<City>, private val preferenc
         return citiesList.size
     }
 
-    private fun formatDate(dateObject: LocalDateTime): String {
+    private fun formatDate(timestamp: Long): String {
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy H:mm:ss")
-        return formatter.format(dateObject)
+        val time = timestamp * 1000L
+        val triggerTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(time),
+                TimeZone.getDefault().toZoneId())
+        return formatter.format(triggerTime)
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

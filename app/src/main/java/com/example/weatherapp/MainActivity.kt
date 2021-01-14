@@ -3,21 +3,23 @@ package com.example.weatherapp
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import androidx.loader.app.LoaderManager
-import androidx.loader.content.Loader
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import kotlin.math.roundToInt
 
-
-class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
+class MainActivity : AppCompatActivity() {
+    lateinit var mService: CityServices
     var citiesList = ArrayList<City>()
     var adapter: CityAdapter? = null
     var recyclerView: RecyclerView? = null
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mService = Common.cityService
         preferenceTemp = getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
         val hasVisited: Boolean? = preferenceTemp?.getBoolean(HAS_VISITED, false)
 
@@ -94,7 +97,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 cityQuery = query
-                initLoaderManager(LOADER_ID)
+                getCity(query)
                 return false
             }
 
@@ -105,45 +108,39 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<City?> {
         return super.onCreateOptionsMenu(menu)
     }
 
+    private fun getCity(query: String) {
+        mService.getCity(query, APP_ID).enqueue(object : Callback<City> {
+            override fun onFailure(call: Call<City>, t: Throwable) {
+                Log.e("TAG", t.message.toString())
+            }
+
+            override fun onResponse(call: Call<City>, response: Response<City>) {
+                val newCity = response.body()
+                if (newCity != null) {
+                    citiesList.add(0, newCity)
+                    adapter!!.notifyDataSetChanged()
+                    updateCityInfo(newCity)
+                } else {
+                    Toast.makeText(this@MainActivity,
+                            "City not found: $cityQuery",
+                            Toast.LENGTH_LONG).show()
+                }
+            }
+        })
+    }
+
     private fun updateCityInfo(city: City) {
         val tempType = preferenceTemp?.getString(TEMP_TYPE, "")!!
-        val temperature = Utils().convertTemperatureType(city.temperature, tempType)
+        val temperature = Utils().convertTemperatureType(city.main.temp, tempType)
         val tempString = "${temperature.roundToInt()} °"
         cityName!!.text = city.name
         cityTemp!!.text = tempString
     }
 
-    fun initLoaderManager(loaderId: Int) {
-        val loaderManager = supportLoaderManager
-        loaderManager.restartLoader(loaderId, null, this)
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<City?> {
-        return CityLoader(this, cityQuery)
-    }
-
-    override fun onLoadFinished(loader: Loader<City?>, data: City?) {
-        if (data != null) {
-            citiesList.add(0, data)
-            adapter!!.notifyDataSetChanged()
-            updateCityInfo(data)
-        } else {
-            Toast.makeText(this,
-                    "City not found: $cityQuery",
-                    Toast.LENGTH_LONG).show()
-        }
-        supportLoaderManager.destroyLoader(LOADER_ID)
-    }
-
-    override fun onLoaderReset(loader: Loader<City?>) {
-        citiesList.clear()
-        adapter!!.notifyDataSetChanged()
-    }
-
     companion object {
-        const val LOADER_ID = 1
         const val HAS_VISITED = "hasVisited"
         const val TEMP_PREF = "temperature"
         const val TEMP_TYPE = "temperatureType"
+        const val APP_ID = "cf7ef9156622ecccc8decb4a00a549b1"
     }
 }
