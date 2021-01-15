@@ -15,10 +15,9 @@ data class City(
         val main: Main,
         @SerializedName("dt")
         @Expose
-        var date: Long) {
-
-    @PrimaryKey(autoGenerate = true)
-    var id: Int? = null
+        var date: Long,
+        @PrimaryKey(autoGenerate = true)
+        var id: Int? = null) {
 
     data class Main(
             @Expose

@@ -1,6 +1,5 @@
 package com.example.weatherapp
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +12,15 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
-class CityAdapter(private val citiesList: ArrayList<City>, private val preferenceTemp: SharedPreferences) : RecyclerView.Adapter<MyViewHolder>() {
+class CityAdapter(private val citiesList: List<City>) : RecyclerView.Adapter<MyViewHolder>() {
+
+    private var tempType: String = "C"
+
+    fun updateTempUnit(type: String) {
+        tempType = type
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.city_item, parent, false)
@@ -23,8 +30,8 @@ class CityAdapter(private val citiesList: ArrayList<City>, private val preferenc
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val city = citiesList[position]
         val name = city.name
-        val tempType = preferenceTemp.getString(MainActivity.TEMP_TYPE, "").toString()
-        val temperature = Utils().convertTemperatureType(city.main.temp, tempType)
+        val temp = tempType
+        val temperature = Utils().convertTemperatureType(city.main.temp, temp)
         val information = "$name, ${temperature.roundToInt()} ° $tempType"
         val date = formatDate(city.date)
         holder.cityInformation.text = information
@@ -44,7 +51,7 @@ class CityAdapter(private val citiesList: ArrayList<City>, private val preferenc
     }
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var cityInformation: TextView = itemView.findViewById(R.id.city_information)
-        var cityDate: TextView = itemView.findViewById(R.id.city_date)
+        val cityInformation: TextView = itemView.findViewById(R.id.city_information)
+        val cityDate: TextView = itemView.findViewById(R.id.city_date)
     }
 }

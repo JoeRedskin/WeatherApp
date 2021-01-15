@@ -6,17 +6,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 object RetrofitClient {
-    private var retrofit: Retrofit? = null
-    private var gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-
-    fun getClient(baseUrl: String): Retrofit {
-        if (retrofit == null) {
-            retrofit = Retrofit.Builder()
-                    .baseUrl(baseUrl)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build()
-        }
-        return retrofit!!
-    }
+    private const val baseUrl = "https://api.openweathermap.org/data/2.5/"
+    private val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+    val retrofit: CityServices = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+            .create(CityServices::class.java)
 }
 

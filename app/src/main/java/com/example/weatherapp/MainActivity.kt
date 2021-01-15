@@ -9,12 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
+import com.example.weatherapp.RetrofitClient.retrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -33,17 +34,14 @@ class MainActivity : AppCompatActivity() {
     private val preferenceTemp: SharedPreferences by lazy {
         getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
     }
-    private val mService: CityServices by lazy {
-        Common.cityService
-    }
     val adapter: CityAdapter by lazy {
-        CityAdapter(citiesList, preferenceTemp)
+        CityAdapter(citiesList)
     }
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
-    private var citiesList = ArrayList<City>()
-    private var cityQuery = ""
+    private val mService: CityServices = retrofit
+    private val citiesList = ArrayList<City>()
     private var tempType = "C"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,24 +50,25 @@ class MainActivity : AppCompatActivity() {
         val hasVisited = preferenceTemp.getBoolean(HAS_VISITED, false)
 
         if (!hasVisited) {
-            val editor = preferenceTemp.edit()
-            editor.putBoolean(HAS_VISITED, true)
-            editor.putString(TEMP_TYPE, "C")
-            editor.apply()
+            preferenceTemp.edit {
+                putBoolean(HAS_VISITED, true)
+                putString(TEMP_TYPE, "C")
+            }
         }
         tempType = preferenceTemp.getString(TEMP_TYPE, "").toString()
 
         recyclerView.adapter = adapter
+        adapter.updateTempUnit(tempType)
         if (tempType == "F") switchCompat.isChecked = false
         switchCompat.setOnCheckedChangeListener { _, isChecked ->
             tempType = if (isChecked) "C" else "F"
-            val editor = preferenceTemp.edit()
-            editor.putString(TEMP_TYPE, tempType)
-            editor.apply()
+            preferenceTemp.edit {
+                putString(TEMP_TYPE, tempType)
+            }
             if (citiesList.isNotEmpty()) {
                 updateCityInfo(citiesList[0])
             }
-            adapter.notifyDataSetChanged()
+            adapter.updateTempUnit(tempType)
         }
 
 //        db.personDao.deleteAll();
@@ -102,7 +101,6 @@ class MainActivity : AppCompatActivity() {
         val searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                cityQuery = query
                 getCity(query)
                 return false
             }
@@ -128,7 +126,7 @@ class MainActivity : AppCompatActivity() {
                     updateCityInfo(newCity)
                 } else {
                     Toast.makeText(this@MainActivity,
-                            "City not found: $cityQuery",
+                            "City not found: $query",
                             Toast.LENGTH_LONG).show()
                 }
             }
