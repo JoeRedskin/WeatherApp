@@ -34,14 +34,13 @@ class MainActivity : AppCompatActivity() {
     private val preferenceTemp: SharedPreferences by lazy {
         getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
     }
-    val adapter: CityAdapter by lazy {
-        CityAdapter(citiesList)
-    }
+
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
     private val mService: CityServices = retrofit
     private val citiesList = ArrayList<City>()
+    private val adapter = CityAdapter(citiesList)
     private var tempType = "C"
 
     override fun onCreate(savedInstanceState: Bundle?) {
