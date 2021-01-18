@@ -16,11 +16,6 @@ class CityAdapter(private val citiesList: List<City>) : RecyclerView.Adapter<MyV
 
     private var tempType: String = "C"
 
-    fun updateTempUnit(type: String) {
-        tempType = type
-        notifyDataSetChanged()
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.city_item, parent, false)
