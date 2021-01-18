@@ -5,7 +5,6 @@ import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.weatherapp.RetrofitClient.retrofit
@@ -20,9 +19,6 @@ class MainActivity : AppCompatActivity() {
     }
     private val cityTemp: TextView by lazy {
         findViewById(R.id.city_temperature)
-    }
-    private val switchCompat: SwitchCompat by lazy {
-        findViewById(R.id.switch_temperature)
     }
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
