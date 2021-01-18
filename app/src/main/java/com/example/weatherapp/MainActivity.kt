@@ -2,20 +2,15 @@ package com.example.weatherapp
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.edit
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import com.example.weatherapp.RetrofitClient.retrofit
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -34,11 +29,12 @@ class MainActivity : AppCompatActivity() {
     private val preferenceTemp: SharedPreferences by lazy {
         getSharedPreferences(TEMP_PREF, MODE_PRIVATE)
     }
-
     private val db: AppDatabase by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
-    private val mService: CityServices = retrofit
+    private val viewModel: CityViewModel by lazy {
+        CityViewModel(CityRepository(retrofit, db.personDao))
+    }
     private val citiesList = ArrayList<City>()
     private val adapter = CityAdapter(citiesList)
     private var tempType = "C"
@@ -46,8 +42,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val hasVisited = preferenceTemp.getBoolean(HAS_VISITED, false)
 
+        val hasVisited = preferenceTemp.getBoolean(HAS_VISITED, false)
         if (!hasVisited) {
             preferenceTemp.edit {
                 putBoolean(HAS_VISITED, true)
@@ -70,28 +66,18 @@ class MainActivity : AppCompatActivity() {
             adapter.updateTempUnit(tempType)
         }
 
-//        db.personDao.deleteAll();
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val everyone = db.personDao.allCities
-        if (everyone.isNotEmpty()) {
-            citiesList.clear()
-            citiesList.addAll(everyone)
-            adapter.notifyDataSetChanged()
-            updateCityInfo(citiesList[0])
-        }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (citiesList.isNotEmpty()) {
-            for (i in citiesList.indices.reversed()) {
-                val city = citiesList[i]
-                if (city.id == null) db.personDao.insert(city)
+        viewModel.citiesList.observe(this) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    citiesList.clear()
+                    citiesList.addAll(it)
+                    updateCityInfo(citiesList[0])
+                    adapter.notifyDataSetChanged()
+                }
             }
         }
+
+        //db.personDao.deleteAll();
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -100,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         val searchView = searchItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                getCity(query)
+                viewModel.findCity(query)
                 return false
             }
 
@@ -109,27 +95,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return super.onCreateOptionsMenu(menu)
-    }
-
-    private fun getCity(query: String) {
-        mService.getCity(query, APP_ID).enqueue(object : Callback<City> {
-            override fun onFailure(call: Call<City>, t: Throwable) {
-                Log.e("TAG", t.message.toString())
-            }
-
-            override fun onResponse(call: Call<City>, response: Response<City>) {
-                val newCity = response.body()
-                if (newCity != null) {
-                    citiesList.add(0, newCity)
-                    adapter.notifyDataSetChanged()
-                    updateCityInfo(newCity)
-                } else {
-                    Toast.makeText(this@MainActivity,
-                            "City not found: $query",
-                            Toast.LENGTH_LONG).show()
-                }
-            }
-        })
     }
 
     private fun updateCityInfo(city: City) {
@@ -144,6 +109,5 @@ class MainActivity : AppCompatActivity() {
         const val HAS_VISITED = "hasVisited"
         const val TEMP_PREF = "temperature"
         const val TEMP_TYPE = "temperatureType"
-        const val APP_ID = "cf7ef9156622ecccc8decb4a00a549b1"
     }
 }

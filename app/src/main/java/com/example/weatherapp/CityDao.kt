@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -21,5 +22,6 @@ interface CityDao {
 
     // Получение всех City из бд
     @get:Query("SELECT * FROM city ORDER BY id DESC")
-    val allCities: List<City>
+    val getAllCities: LiveData<List<City>>
+
 }
