@@ -2,7 +2,7 @@ package com.example.weatherapp
 
 import androidx.lifecycle.ViewModel
 
-class CityViewModel constructor(
+class CityViewModel(
         private val cityRepository: CityRepository
 ) : ViewModel() {
 

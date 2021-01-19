@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
@@ -20,12 +21,13 @@ class MainActivity : AppCompatActivity() {
     private val cityTemp: TextView by lazy {
         findViewById(R.id.city_temperature)
     }
-    private val db: AppDatabase by lazy {
+    private val db by lazy {
         Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
     }
-    private val viewModel: CityViewModel by lazy {
-        CityViewModel(CityRepository(retrofit, db.personDao))
-    }
+    private val viewModel: CityViewModel by viewModels(
+            factoryProducer = { CityViewModelFactory(CityRepository(retrofit, db.personDao)) }
+    )
+
     private val citiesList = ArrayList<City>()
     private val adapter = CityAdapter(citiesList)
     private var tempType = "C"
@@ -37,13 +39,11 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         viewModel.citiesList.observe(this) {
-            if (it != null) {
-                if (it.isNotEmpty()) {
-                    citiesList.clear()
-                    citiesList.addAll(it)
-                    updateCityInfo(citiesList[0])
-                    adapter.notifyDataSetChanged()
-                }
+            if (!it.isNullOrEmpty()) {
+                citiesList.clear()
+                citiesList.addAll(it)
+                updateCityInfo(citiesList[0])
+                adapter.notifyDataSetChanged()
             }
         }
 

@@ -6,13 +6,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CityRepository constructor(
+class CityRepository (
         private val cityService: CityServices,
         private val cityDao: CityDao
 ) {
 
     fun getCities(): LiveData<List<City>> {
-        return cityDao.getAllCities
+        return cityDao.getCities
     }
 
     fun findCity(query: String) {
