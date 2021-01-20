@@ -34,10 +34,13 @@ android {
 
 dependencies {
     def room_version = "2.2.6"
+    def koin_version = '2.2.2'
     def fragment_version = "1.2.5"
     apply plugin: 'kotlin-kapt'
-    implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
@@ -55,4 +58,5 @@ dependencies {
 repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
+    jcenter()
 }

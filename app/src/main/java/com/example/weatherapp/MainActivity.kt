@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
-import com.example.weatherapp.RetrofitClient.retrofit
+import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -21,13 +19,8 @@ class MainActivity : AppCompatActivity() {
     private val cityTemp: TextView by lazy {
         findViewById(R.id.city_temperature)
     }
-    private val db by lazy {
-        Room.databaseBuilder(applicationContext, AppDatabase::class.java, "populus-database").allowMainThreadQueries().fallbackToDestructiveMigration().build()
-    }
-    private val viewModel: CityViewModel by viewModels(
-            factoryProducer = { CityViewModelFactory(CityRepository(retrofit, db.personDao)) }
-    )
 
+    private val viewModel by viewModel<CityViewModel>()
     private val citiesList = ArrayList<City>()
     private val adapter = CityAdapter(citiesList)
     private var tempType = "C"

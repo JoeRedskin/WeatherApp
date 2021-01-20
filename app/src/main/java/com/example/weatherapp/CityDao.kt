@@ -23,5 +23,4 @@ interface CityDao {
     // Получение всех City из бд
     @get:Query("SELECT * FROM city ORDER BY id DESC")
     val getCities: LiveData<List<City>>
-
 }
