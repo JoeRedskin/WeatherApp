@@ -26,7 +26,7 @@ class CityAdapter(private val citiesList: List<City>) : RecyclerView.Adapter<MyV
         val city = citiesList[position]
         val name = city.name
         val temp = tempType
-        val temperature = Utils().convertTemperatureType(city.main.temp, temp)
+        val temperature = Utils.convertTemperatureType(city.main.temp, temp)
         val information = "$name, ${temperature.roundToInt()} ° $tempType"
         val date = formatDate(city.date)
         holder.cityInformation.text = information

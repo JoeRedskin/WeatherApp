@@ -8,7 +8,5 @@ class CityViewModel(
 
     val citiesList = cityRepository.getCities()
 
-    fun findCity(query: String) {
-        cityRepository.findCity(query)
-    }
+    fun findCity(query: String) = cityRepository.findCity(query)
 }

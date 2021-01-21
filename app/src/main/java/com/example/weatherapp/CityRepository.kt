@@ -2,13 +2,11 @@ package com.example.weatherapp
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.room.Room
-import org.koin.dsl.module
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CityRepository (
+class CityRepository(
         private val cityService: CityServices,
         private val cityDao: CityDao
 ) {

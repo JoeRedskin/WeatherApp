@@ -19,11 +19,13 @@ class MainActivity : AppCompatActivity() {
     private val cityTemp: TextView by lazy {
         findViewById(R.id.city_temperature)
     }
+    private val tempType by lazy {
+        resources.getString(R.string.celsius)
+    }
 
     private val viewModel by viewModel<CityViewModel>()
     private val citiesList = ArrayList<City>()
     private val adapter = CityAdapter(citiesList)
-    private var tempType = "C"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +41,6 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         }
-
-        //db.personDao.deleteAll();
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCityInfo(city: City) {
-        val temperature = Utils().convertTemperatureType(city.main.temp, tempType)
+        val temperature = Utils.convertTemperatureType(city.main.temp, tempType)
         val tempString = "${temperature.roundToInt()} °"
         cityName.text = city.name
         cityTemp.text = tempString
