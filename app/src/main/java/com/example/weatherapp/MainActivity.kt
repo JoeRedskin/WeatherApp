@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.weatherapp.databinding.ActivityMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
-import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity() {
             if (!it.isNullOrEmpty()) {
                 citiesList.clear()
                 citiesList.addAll(it)
-//                updateCityInfo(citiesList[0])
                 adapter.notifyDataSetChanged()
             }
         }
@@ -52,13 +50,4 @@ class MainActivity : AppCompatActivity() {
         })
         return super.onCreateOptionsMenu(menu)
     }
-
-//    private fun updateCityInfo(city: City) {
-//        val temperature = Utils.convertTemperatureType(city.main.temp, tempType)
-//        val tempString = "${temperature.roundToInt()} °"
-//
-//        binding.name = city.name
-//        binding.temperature = tempString
-//    }
-
 }

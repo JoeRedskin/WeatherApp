@@ -8,6 +8,7 @@
         <variable
             name="city"
             type="com.example.weatherapp.City" />
+
         <variable
             name="info"
             type="String" />
@@ -29,7 +30,7 @@
             android:layout_marginTop="@dimen/item_vertical_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/item_vertical_margin"
-            android:text="@{info}"
+            android:text="@{city.getInfo() + @string/celsius}"
             android:textColor="@color/color_black"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/city_date"
@@ -46,7 +47,7 @@
             android:layout_marginTop="@dimen/item_vertical_margin"
             android:layout_marginEnd="@dimen/horizontal_margin"
             android:layout_marginBottom="@dimen/item_vertical_margin"
-            android:text="@{date}"
+            android:text="@{city.getDateToString()}"
             android:textColor="@color/color_black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
