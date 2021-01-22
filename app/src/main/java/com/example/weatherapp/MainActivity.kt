@@ -3,24 +3,19 @@ package com.example.weatherapp
 import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
+import androidx.databinding.DataBindingUtil
+import com.example.weatherapp.databinding.ActivityMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
-    private val recyclerView: RecyclerView by lazy {
-        findViewById(R.id.recycler_view)
-    }
-    private val cityName: TextView by lazy {
-        findViewById(R.id.city_name)
-    }
-    private val cityTemp: TextView by lazy {
-        findViewById(R.id.city_temperature)
-    }
     private val tempType by lazy {
         resources.getString(R.string.celsius)
+    }
+
+    private val binding: ActivityMainBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.activity_main)
     }
 
     private val viewModel by viewModel<CityViewModel>()
@@ -29,9 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
 
         viewModel.citiesList.observe(this) {
             if (!it.isNullOrEmpty()) {
@@ -63,8 +57,9 @@ class MainActivity : AppCompatActivity() {
     private fun updateCityInfo(city: City) {
         val temperature = Utils.convertTemperatureType(city.main.temp, tempType)
         val tempString = "${temperature.roundToInt()} °"
-        cityName.text = city.name
-        cityTemp.text = tempString
+
+        binding.name = city.name
+        binding.temperature = tempString
     }
 
 }
