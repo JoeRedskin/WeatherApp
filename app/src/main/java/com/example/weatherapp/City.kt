@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import kotlin.math.roundToInt
 
 @Entity
 data class City(
@@ -23,4 +24,8 @@ data class City(
             @Expose
             val temp: Double
     )
+
+    fun getInfo(name: String, temp: Double) : String{
+        return "$name, ${temp.roundToInt()} °"
+    }
 }

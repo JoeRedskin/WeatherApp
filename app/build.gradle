@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -31,8 +32,9 @@ android {
         }
     }
 
-    dataBinding {
-        enabled true
+    buildFeatures {
+        dataBinding true
+        viewBinding = true
     }
 }
 
@@ -40,8 +42,8 @@ dependencies {
     def room_version = "2.2.6"
     def koin_version = '2.2.2'
     def fragment_version = "1.2.5"
-    apply plugin: 'kotlin-kapt'
     kapt "androidx.room:room-compiler:$room_version"
+    kapt 'com.android.databinding:compiler:3.1.4'
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-viewmodel:$koin_version"
     implementation "androidx.room:room-runtime:$room_version"

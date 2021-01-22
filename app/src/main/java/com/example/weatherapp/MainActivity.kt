@@ -10,9 +10,6 @@ import org.koin.android.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
-    private val tempType by lazy {
-        resources.getString(R.string.celsius)
-    }
 
     private val binding: ActivityMainBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -25,13 +22,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        binding.lifecycleOwner = this
+        binding.viewmodel = viewModel
         binding.recyclerView.adapter = adapter
 
         viewModel.citiesList.observe(this) {
             if (!it.isNullOrEmpty()) {
                 citiesList.clear()
                 citiesList.addAll(it)
-                updateCityInfo(citiesList[0])
+//                updateCityInfo(citiesList[0])
                 adapter.notifyDataSetChanged()
             }
         }
@@ -54,12 +53,12 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun updateCityInfo(city: City) {
-        val temperature = Utils.convertTemperatureType(city.main.temp, tempType)
-        val tempString = "${temperature.roundToInt()} °"
-
-        binding.name = city.name
-        binding.temperature = tempString
-    }
+//    private fun updateCityInfo(city: City) {
+//        val temperature = Utils.convertTemperatureType(city.main.temp, tempType)
+//        val tempString = "${temperature.roundToInt()} °"
+//
+//        binding.name = city.name
+//        binding.temperature = tempString
+//    }
 
 }

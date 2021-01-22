@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="viewmodel"
+            type="com.example.weatherapp.CityViewModel" />
+
+        <variable
             name="name"
             type="String" />
 
@@ -37,7 +41,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:layout_marginEnd="@dimen/horizontal_margin"
-                android:text="@{name}"
+                android:text="@{viewmodel.city.name}"
                 android:textColor="@color/color_black"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"

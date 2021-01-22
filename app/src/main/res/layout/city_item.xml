@@ -6,6 +6,9 @@
     <data>
 
         <variable
+            name="city"
+            type="com.example.weatherapp.City" />
+        <variable
             name="info"
             type="String" />
 
