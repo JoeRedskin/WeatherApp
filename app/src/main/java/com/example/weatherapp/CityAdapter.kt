@@ -15,11 +15,12 @@ import kotlin.math.roundToInt
 
 class CityAdapter(private val citiesList: List<City>) : RecyclerView.Adapter<MyViewHolder>() {
 
-    private var tempType: String = "C"
+    private lateinit var tempType: String
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding: CityItemBinding = DataBindingUtil.inflate(inflater, R.layout.city_item, parent, false)
+        val binding = DataBindingUtil.inflate<CityItemBinding>(inflater, R.layout.city_item, parent, false)
+        tempType = parent.resources.getString(R.string.celsius)
         return MyViewHolder(binding)
     }
 
