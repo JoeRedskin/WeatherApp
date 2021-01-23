@@ -8,14 +8,6 @@
         <variable
             name="viewmodel"
             type="com.example.weatherapp.CityViewModel" />
-
-        <variable
-            name="name"
-            type="String" />
-
-        <variable
-            name="temperature"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

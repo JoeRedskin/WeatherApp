@@ -8,14 +8,6 @@
         <variable
             name="city"
             type="com.example.weatherapp.City" />
-
-        <variable
-            name="info"
-            type="String" />
-
-        <variable
-            name="date"
-            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
