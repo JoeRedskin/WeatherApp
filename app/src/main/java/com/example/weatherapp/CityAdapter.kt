@@ -57,9 +57,7 @@ class CityAdapter(private val citiesList: List<City>) : RecyclerView.Adapter<Cit
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
             val oldCity = oldList[oldItemPosition]
             val newCity = newList[newItemPosition]
-            return (oldCity.name == newCity.name
-                    && oldCity.date == newCity.date
-                    && oldCity.main.temp == newCity.main.temp)
+            return oldCity == newCity
         }
     }
 }

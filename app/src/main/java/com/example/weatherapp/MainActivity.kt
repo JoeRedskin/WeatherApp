@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         binding.viewmodel = viewModel
         binding.recyclerView.adapter = adapter
 
+//        viewModel.deleteCities()
         viewModel.citiesList.observe(this) {
             if (!it.isNullOrEmpty()) {
                 citiesList.clear()
