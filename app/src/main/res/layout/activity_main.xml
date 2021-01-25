@@ -6,12 +6,8 @@
     <data>
 
         <variable
-            name="name"
-            type="String" />
-
-        <variable
-            name="temperature"
-            type="String" />
+            name="viewmodel"
+            type="com.example.weatherapp.CityViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +33,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:layout_marginEnd="@dimen/horizontal_margin"
-                android:text="@{name}"
+                android:text="@{viewmodel.citiesList.get(0).name}"
                 android:textColor="@color/color_black"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +48,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:layout_marginBottom="@dimen/vertical_margin"
-                android:text="@{temperature}"
+                android:text='@{viewmodel.citiesList.get(0).convertTempToString() + "°"}'
                 android:textColor="@color/color_black"
                 android:textSize="36sp"
                 android:textStyle="bold"
