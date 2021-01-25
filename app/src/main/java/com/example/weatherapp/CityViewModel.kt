@@ -7,6 +7,5 @@ class CityViewModel(
 ) : ViewModel() {
 
     val citiesList = cityRepository.getCities()
-    val city = cityRepository.getLastCity()
     fun findCity(query: String) = cityRepository.findCity(query)
 }

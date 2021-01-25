@@ -14,10 +14,6 @@ class CityRepository(
         return cityDao.getCities
     }
 
-    fun getLastCity(): LiveData<City> {
-        return cityDao.getLastCity
-    }
-
     fun findCity(query: String) {
         cityService.getCity(query, APP_ID).enqueue(object : Callback<City> {
             override fun onFailure(call: Call<City>, t: Throwable) {

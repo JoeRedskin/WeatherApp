@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.weatherapp.databinding.ActivityMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
+
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
             if (!it.isNullOrEmpty()) {
                 citiesList.clear()
                 citiesList.addAll(it)
-                adapter.notifyDataSetChanged()
+                adapter.updateList(citiesList)
             }
         }
     }
