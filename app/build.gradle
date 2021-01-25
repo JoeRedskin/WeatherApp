@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -30,13 +31,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        dataBinding true
+        viewBinding = true
+    }
 }
 
 dependencies {
     def room_version = "2.2.6"
-    apply plugin: 'kotlin-kapt'
-    implementation "androidx.room:room-runtime:$room_version"
+    def koin_version = '2.2.2'
+    def fragment_version = "1.2.5"
     kapt "androidx.room:room-compiler:$room_version"
+    kapt 'com.android.databinding:compiler:3.1.4'
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.fragment:fragment-ktx:$fragment_version"
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -53,4 +64,5 @@ dependencies {
 repositories {
     maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
     mavenCentral()
+    jcenter()
 }
