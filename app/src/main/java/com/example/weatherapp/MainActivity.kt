@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.weatherapp.databinding.ActivityMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
+
 class MainActivity : AppCompatActivity() {
 
     private val binding: ActivityMainBinding by lazy {
@@ -15,21 +16,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val viewModel by viewModel<CityViewModel>()
-    private val citiesList = ArrayList<City>()
-    private val adapter = CityAdapter(citiesList)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val adapter = CityAdapter()
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
         binding.recyclerView.adapter = adapter
 
+//        viewModel.deleteCities()
         viewModel.citiesList.observe(this) {
             if (!it.isNullOrEmpty()) {
-                citiesList.clear()
-                citiesList.addAll(it)
-                adapter.notifyDataSetChanged()
+                adapter.updateList(it)
             }
         }
     }

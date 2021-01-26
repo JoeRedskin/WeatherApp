@@ -7,6 +7,6 @@ class CityViewModel(
 ) : ViewModel() {
 
     val citiesList = cityRepository.getCities()
-    val city = cityRepository.getLastCity()
     fun findCity(query: String) = cityRepository.findCity(query)
+    fun deleteCities() = cityRepository.deleteCities()
 }

@@ -33,7 +33,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:layout_marginEnd="@dimen/horizontal_margin"
-                android:text="@{viewmodel.citiesList.get(0).name}"
+                android:text='@{viewmodel.citiesList.size() > 0? viewmodel.citiesList.get(0).name: "" }'
                 android:textColor="@color/color_black"
                 android:textSize="30sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
                 android:layout_marginStart="@dimen/horizontal_margin"
                 android:layout_marginTop="@dimen/vertical_margin"
                 android:layout_marginBottom="@dimen/vertical_margin"
-                android:text='@{viewmodel.citiesList.get(0).convertTempToString() + "°"}'
+                android:text='@{viewmodel.citiesList.size() > 0?viewmodel.citiesList.get(0).convertTempToString() + "°": ""}'
                 android:textColor="@color/color_black"
                 android:textSize="36sp"
                 android:textStyle="bold"

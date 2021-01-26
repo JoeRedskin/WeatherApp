@@ -14,8 +14,8 @@ class CityRepository(
         return cityDao.getCities
     }
 
-    fun getLastCity(): LiveData<City> {
-        return cityDao.getLastCity
+    fun deleteCities(){
+        cityDao.deleteAll()
     }
 
     fun findCity(query: String) {

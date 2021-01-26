@@ -20,10 +20,6 @@ interface CityDao {
     @Query("DELETE FROM city")
     fun deleteAll()
 
-    // Получение последнего City из бд
-    @get:Query("SELECT * FROM city ORDER BY id DESC LIMIT 1")
-    val getLastCity: LiveData<City>
-
     // Получение всех City из бд
     @get:Query("SELECT * FROM city ORDER BY id DESC")
     val getCities: LiveData<List<City>>
