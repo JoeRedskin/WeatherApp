@@ -1,12 +1,25 @@
 package com.example.weatherapp
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class CityViewModel(
-        private val cityRepository: CityRepository
+        private val repository: CityRepository
 ) : ViewModel() {
 
-    val citiesList = cityRepository.getCities()
-    fun findCity(query: String) = cityRepository.findCity(query)
-    fun deleteCities() = cityRepository.deleteCities()
+    val citiesList = repository.getCities()
+
+    fun findCity(query: String) {
+        viewModelScope.launch {
+            repository.findCity(query)
+        }
+
+    }
+
+    fun deleteCities() {
+        viewModelScope.launch {
+            repository.deleteCities()
+        }
+    }
 }

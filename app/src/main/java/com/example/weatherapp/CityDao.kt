@@ -10,15 +10,15 @@ import androidx.room.Query
 interface CityDao {
     // Добавление City в бд
     @Insert
-    fun insert(city: City)
+    suspend fun insert(city: City)
 
     // Удаление City из бд
     @Delete
-    fun delete(city: City)
+    suspend fun delete(city: City)
 
     // Удаление всех данных из бд
     @Query("DELETE FROM city")
-    fun deleteAll()
+    suspend fun deleteAll()
 
     // Получение всех City из бд
     @get:Query("SELECT * FROM city ORDER BY id DESC")
