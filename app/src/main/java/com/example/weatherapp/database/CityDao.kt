@@ -1,10 +1,11 @@
-package com.example.weatherapp
+package com.example.weatherapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.weatherapp.model.City
 
 @Dao
 interface CityDao {

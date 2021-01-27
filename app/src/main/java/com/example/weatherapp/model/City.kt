@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.model
 
 import androidx.room.Embedded
 import androidx.room.Entity

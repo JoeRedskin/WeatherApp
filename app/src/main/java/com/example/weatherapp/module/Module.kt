@@ -1,10 +1,11 @@
 package com.example.weatherapp
 
-import com.example.weatherapp.Provide.provideDao
-import com.example.weatherapp.Provide.provideDatabase
-import com.example.weatherapp.Provide.provideGson
-import com.example.weatherapp.Provide.provideRetrofit
-import com.example.weatherapp.Provide.provideUserRepository
+import com.example.weatherapp.model.CityViewModel
+import com.example.weatherapp.module.Provide.provideDao
+import com.example.weatherapp.module.Provide.provideDatabase
+import com.example.weatherapp.module.Provide.provideGson
+import com.example.weatherapp.module.Provide.provideRetrofit
+import com.example.weatherapp.module.Provide.provideUserRepository
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.module.Module

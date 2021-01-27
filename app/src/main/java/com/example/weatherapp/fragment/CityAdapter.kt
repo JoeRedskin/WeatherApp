@@ -1,12 +1,14 @@
-package com.example.weatherapp
+package com.example.weatherapp.fragment
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.weatherapp.CityAdapter.CityViewHolder
+import com.example.weatherapp.R
+import com.example.weatherapp.fragment.CityAdapter.CityViewHolder
 import com.example.weatherapp.databinding.CityItemBinding
+import com.example.weatherapp.model.City
 
 
 class CityAdapter : RecyclerView.Adapter<CityViewHolder>() {
