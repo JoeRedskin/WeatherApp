@@ -9,7 +9,7 @@ import com.example.weatherapp.CityAdapter.CityViewHolder
 import com.example.weatherapp.databinding.CityItemBinding
 
 
-class CityAdapter: RecyclerView.Adapter<CityViewHolder>() {
+class CityAdapter : RecyclerView.Adapter<CityViewHolder>() {
 
     private val citiesList = mutableListOf<City>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {

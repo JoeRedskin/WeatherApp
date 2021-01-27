@@ -14,27 +14,17 @@ class CityRepository(
         return cityDao.getCities
     }
 
-    fun deleteCities(){
+    suspend fun deleteCities(){
         cityDao.deleteAll()
     }
 
-    fun findCity(query: String) {
-        cityService.getCity(query, APP_ID).enqueue(object : Callback<City> {
-            override fun onFailure(call: Call<City>, t: Throwable) {
-                Log.e("TAG", t.message.toString())
-            }
-
-            override fun onResponse(call: Call<City>, response: Response<City>) {
-                val newCity = response.body()
-                if (newCity != null) {
-                    cityDao.insert(newCity)
-                    Log.d("VALUE", newCity.toString())
-
-                } else {
-                    Log.e("TAG", "City not found: $query")
-                }
-            }
-        })
+    suspend fun findCity(query: String) {
+        try {
+            val result = cityService.getCity(query, APP_ID)
+            cityDao.insert(result)
+        } catch (t: Throwable) {
+            Log.e("TAG", t.message.toString())
+        }
     }
 
     companion object {
