@@ -3,25 +3,35 @@ package com.example.weatherapp.fragment
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapp.R
-import com.example.weatherapp.fragment.CityAdapter.CityViewHolder
 import com.example.weatherapp.databinding.CityItemBinding
+import com.example.weatherapp.fragment.CityAdapter.CityViewHolder
 import com.example.weatherapp.model.City
 
 
-class CityAdapter : RecyclerView.Adapter<CityViewHolder>() {
+class CityAdapter(private val onItemClickListener: OnItemClickListener) : RecyclerView.Adapter<CityViewHolder>() {
 
     private val citiesList = mutableListOf<City>()
+
+    interface OnItemClickListener {
+        fun onItemClicked(city: City)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<CityItemBinding>(inflater, R.layout.city_item, parent, false)
         return CityViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CityViewHolder, position: Int) =
-            holder.bind(citiesList[position])
+    override fun onBindViewHolder(holder: CityViewHolder, position: Int) {
+        holder.bind(citiesList[position])
+        holder.itemView.setOnClickListener {
+            onItemClickListener.onItemClicked(citiesList[position]);
+        }
+    }
 
     override fun getItemCount(): Int = citiesList.size
 

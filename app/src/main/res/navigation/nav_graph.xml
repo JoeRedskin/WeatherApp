@@ -9,5 +9,18 @@
         android:id="@+id/cityFragment"
         android:name="com.example.weatherapp.fragment.CityFragment"
         android:label="CityFragment"
-        tools:layout="@layout/city_fragment"/>
+        tools:layout="@layout/fragment_city">
+        <action
+            android:id="@+id/action_cityFragment_to_cityDetailsFragment"
+            app:destination="@id/cityDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cityDetailsFragment"
+        android:name="com.example.weatherapp.fragment.CityDetailsFragment"
+        android:label="CityDetailsFragment"
+        tools:layout="@layout/fragment_city_details">
+        <argument
+            android:name="city"
+            app:argType="com.example.weatherapp.model.City" />
+    </fragment>
 </navigation>
