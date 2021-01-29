@@ -41,13 +41,13 @@ class CityFragment : Fragment() {
             }
         })
 
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = viewModel
         binding.recyclerView.adapter = adapter
 
         setupMenu()
 //        viewModel.deleteCities()
-        viewModel.citiesList.observe(requireActivity()) {
+        viewModel.citiesList.observe(viewLifecycleOwner) {
             if (!it.isNullOrEmpty()) {
                 adapter.updateList(it)
             }
