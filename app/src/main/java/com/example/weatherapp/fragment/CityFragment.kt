@@ -1,15 +1,15 @@
 package com.example.weatherapp.fragment
 
 import android.os.Bundle
-import android.view.*
-import android.widget.Toolbar
-import androidx.appcompat.widget.SearchView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentCityBinding
 import com.example.weatherapp.model.City
@@ -18,24 +18,19 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class CityFragment : Fragment() {
 
-    private val binding: FragmentCityBinding by lazy {
-        DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_city)
-    }
-
+    private lateinit var binding: FragmentCityBinding
     private val viewModel by viewModel<CityViewModel>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_city, container, false)
+                              savedInstanceState: Bundle?): View {
+        binding = DataBindingUtil.inflate(
+                inflater, R.layout.fragment_city, container, false)
+        setupWithNavController(binding.toolbar, findNavController())
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val appBarConfiguration = AppBarConfiguration(findNavController().graph)
-        val toolbar = requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
-//        requireActivity().setSupportActionController()
-        toolbar.setupWithNavController(findNavController(),appBarConfiguration)
 
         val adapter = CityAdapter(object : CityAdapter.OnItemClickListener {
             override fun onItemClicked(city: City) {
@@ -43,10 +38,12 @@ class CityFragment : Fragment() {
                 findNavController().navigate(action)
             }
         })
+
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
         binding.recyclerView.adapter = adapter
 
+        setupMenu()
 //        viewModel.deleteCities()
         viewModel.citiesList.observe(requireActivity()) {
             if (!it.isNullOrEmpty()) {
@@ -55,11 +52,11 @@ class CityFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_search, menu)
-        val searchItem = menu.findItem(R.id.action_search)
+    private fun setupMenu() {
+        binding.toolbar.inflateMenu(R.menu.menu_search)
+        val searchItem = binding.toolbar.menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
                 viewModel.findCity(query)
                 return false
@@ -69,6 +66,5 @@ class CityFragment : Fragment() {
                 return true
             }
         })
-        super.onCreateOptionsMenu(menu, inflater)
     }
 }
