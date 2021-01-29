@@ -40,7 +40,7 @@ class CityDetailsFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_city_details, container, false)
-        binding.lifecycleOwner
+
         setupWithNavController(binding.toolbar, findNavController())
         return binding.root
     }
@@ -49,6 +49,7 @@ class CityDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        Log.d("tag", args.id.toString())
 //        Log.d("TAG", viewModel.city.toString())
+        binding.lifecycleOwner
         binding.viewmodel = viewModel
     }
 
