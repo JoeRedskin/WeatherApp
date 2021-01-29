@@ -12,13 +12,6 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.core.module.Module
 import org.koin.dsl.module
 
-val cityViewModelModule: Module = module {
-    viewModel { CityViewModel(get()) }
-}
-
-val cityDetailViewModelModule: Module = module {
-    viewModel { (id: Int) -> CityDetailsViewModel(id) }
-}
 
 val netModule = module {
     single { provideGson() }

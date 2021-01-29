@@ -8,18 +8,20 @@ import android.widget.SearchView
 import android.widget.SearchView.OnQueryTextListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.example.weatherapp.R
 import com.example.weatherapp.databinding.FragmentCityBinding
 import com.example.weatherapp.model.City
 import com.example.weatherapp.model.CityViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
 
 class CityFragment : Fragment() {
 
     private lateinit var binding: FragmentCityBinding
-    private val viewModel by viewModel<CityViewModel>()
+    private val viewModel by viewModels<CityViewModel>(
+            factoryProducer = { CityViewModelFactory() }
+    )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {

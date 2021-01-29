@@ -17,7 +17,7 @@ class CityRepository(
         return cityDao.getCity(id)
     }
 
-    suspend fun deleteCities(){
+    suspend fun deleteCities() {
         cityDao.deleteAll()
     }
 

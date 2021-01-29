@@ -17,7 +17,6 @@ import com.example.weatherapp.model.CityDetailsViewModel
 class CityDetailsFragment : Fragment() {
 
     private lateinit var binding: FragmentCityDetailsBinding
-
     private val args: CityDetailsFragmentArgs by navArgs()
     private val viewModel by viewModels<CityDetailsViewModel>(
             factoryProducer = { CityDetailViewModelFactory(args.id) }
@@ -27,16 +26,13 @@ class CityDetailsFragment : Fragment() {
                               savedInstanceState: Bundle?): View {
         binding = DataBindingUtil.inflate(
                 inflater, R.layout.fragment_city_details, container, false)
-
         setupWithNavController(binding.toolbar, findNavController())
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        Log.d("tag", args.id.toString())
-//        Log.d("TAG", viewModel.city.toString())
-        binding.lifecycleOwner
+        binding.lifecycleOwner = this
         binding.viewmodel = viewModel
     }
 

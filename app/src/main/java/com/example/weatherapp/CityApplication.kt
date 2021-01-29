@@ -13,7 +13,7 @@ class CityApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@CityApplication)
-            modules(cityViewModelModule, cityDetailViewModelModule, repositoryModule, netModule, databaseModule)
+            modules(repositoryModule, netModule, databaseModule)
         }
     }
 }
