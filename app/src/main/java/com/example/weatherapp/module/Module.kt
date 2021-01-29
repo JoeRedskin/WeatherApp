@@ -17,7 +17,7 @@ val cityViewModelModule: Module = module {
 }
 
 val cityDetailViewModelModule: Module = module {
-    viewModel { (id: Int) -> CityDetailsViewModel(id, get()) }
+    viewModel { (id: Int) -> CityDetailsViewModel(id) }
 }
 
 val netModule = module {
