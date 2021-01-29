@@ -20,7 +20,7 @@
         android:label="CityDetailsFragment"
         tools:layout="@layout/fragment_city_details">
         <argument
-            android:name="city"
-            app:argType="com.example.weatherapp.model.City" />
+            android:name="id"
+            app:argType="integer" />
     </fragment>
 </navigation>

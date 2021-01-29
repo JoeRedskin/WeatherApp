@@ -2,7 +2,6 @@ package com.example.weatherapp.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weatherapp.model.CityRepository
 import kotlinx.coroutines.launch
 
 class CityViewModel(

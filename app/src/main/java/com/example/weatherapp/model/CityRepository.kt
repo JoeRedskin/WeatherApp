@@ -13,6 +13,10 @@ class CityRepository(
         return cityDao.getCities
     }
 
+    fun getCity(id: Int): LiveData<City> {
+        return cityDao.getCity(id)
+    }
+
     suspend fun deleteCities(){
         cityDao.deleteAll()
     }

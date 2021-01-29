@@ -1,12 +1,10 @@
 package com.example.weatherapp.model
 
-import android.os.Parcelable
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,7 +22,7 @@ data class City(
         @Expose
         var date: Long,
         @PrimaryKey(autoGenerate = true)
-        var id: Int? = null) : Serializable{
+        var id: Int? = null) {
 
     data class Main(
             @Expose

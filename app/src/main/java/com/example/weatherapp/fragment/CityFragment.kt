@@ -34,7 +34,8 @@ class CityFragment : Fragment() {
 
         val adapter = CityAdapter(object : CityAdapter.OnItemClickListener {
             override fun onItemClicked(city: City) {
-                val action = CityFragmentDirections.actionCityFragmentToCityDetailsFragment(city)
+                val id = city.id
+                val action = CityFragmentDirections.actionCityFragmentToCityDetailsFragment(city.id!!)
                 findNavController().navigate(action)
             }
         })

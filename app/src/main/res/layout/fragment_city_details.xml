@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="city"
-            type="com.example.weatherapp.model.City" />
+            name="viewmodel"
+            type="com.example.weatherapp.model.CityDetailsViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
-                android:text="@{city.name}"
+                android:text="@{viewmodel.city.name}"
                 android:textSize="36sp"
                 app:layout_constraintBottom_toTopOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -53,7 +53,7 @@
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text='@{city.convertTempToString() + "°"}'
+                android:text='@{viewmodel.city.convertTempToString() + "°"}'
                 android:textSize="36sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
