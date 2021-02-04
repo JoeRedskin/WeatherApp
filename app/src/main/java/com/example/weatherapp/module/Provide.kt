@@ -1,7 +1,11 @@
-package com.example.weatherapp
+package com.example.weatherapp.module
 
 import android.app.Application
 import androidx.room.Room
+import com.example.weatherapp.model.CityRepository
+import com.example.weatherapp.api.CityServices
+import com.example.weatherapp.database.AppDatabase
+import com.example.weatherapp.database.CityDao
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import retrofit2.Retrofit

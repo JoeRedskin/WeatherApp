@@ -1,10 +1,11 @@
-package com.example.weatherapp
+package com.example.weatherapp.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.example.weatherapp.model.City
 
 @Dao
 interface CityDao {
@@ -19,6 +20,10 @@ interface CityDao {
     // Удаление всех данных из бд
     @Query("DELETE FROM city")
     suspend fun deleteAll()
+
+    // Получение City по id
+    @Query("SELECT * FROM city WHERE id = :id")
+    fun getCity(id:Int): LiveData<City>
 
     // Получение всех City из бд
     @get:Query("SELECT * FROM city ORDER BY id DESC")

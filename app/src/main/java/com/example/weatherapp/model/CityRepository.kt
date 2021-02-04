@@ -1,10 +1,9 @@
-package com.example.weatherapp
+package com.example.weatherapp.model
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.weatherapp.api.CityServices
+import com.example.weatherapp.database.CityDao
 
 class CityRepository(
         private val cityService: CityServices,
@@ -14,7 +13,11 @@ class CityRepository(
         return cityDao.getCities
     }
 
-    suspend fun deleteCities(){
+    fun getCity(id: Int): LiveData<City> {
+        return cityDao.getCity(id)
+    }
+
+    suspend fun deleteCities() {
         cityDao.deleteAll()
     }
 
